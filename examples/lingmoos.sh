@@ -104,6 +104,7 @@ case "${codename:-$suite}" in
 esac
 
 # Install lingmo bootstrap
+apt update
 apt install -y sudo dpkg-dev dctrl-tools devscripts wget isolinux syslinux
 git clone https://github.com/LingmoOS/lingmo-system-build /tmp/lingmo-system-build
 bash -c "cd /tmp/lingmo-system-build/debootstrap/ && apt-get build-dep ./ && debuild -us -uc -b && apt -y install ../*.deb"
