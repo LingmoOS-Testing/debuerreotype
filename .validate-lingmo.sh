@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-epoch="$(TZ=UTC date --date "$TIMESTAMP" +%s)"
+# epoch="$(TZ=UTC date --date "$TIMESTAMP" +%s)"
 serial="$(TZ=UTC date --date "@$epoch" +%Y%m%d)"
 
 buildArgs=()
