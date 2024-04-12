@@ -115,6 +115,10 @@ debuerreotype-init "${initArgs[@]}" "$rootfsDir" "$suite" "$mirror"
 
 debuerreotype-minimizing-config "$rootfsDir"
 
+keyUrl='https://packages.lingmo.org/key/lingmo.gpg'
+keyring="$rootfsDir/etc/apt/trusted.gpg.d/lingmo-archive-keyring.gpg"
+wget -O "$keyring.asc" "$keyUrl"
+
 # TODO do we need to update sources.list here? (security?)
 debuerreotype-apt-get "$rootfsDir" update -qq
 
@@ -139,18 +143,18 @@ mkdir "$rootfsDir"-slim
 tar -cC "$rootfsDir" . | tar -xC "$rootfsDir"-slim
 
 # for historical reasons (related to their usefulness in debugging non-working container networking in container early days before "--network container:xxx"), Debian 10 and older non-slim images included both "ping" and "ip" above "minbase", but in 11+ (Bullseye), that will no longer be the case and we will instead be a faithful minbase again :D
-epoch2021="$(date --date '2021-01-01 00:00:00' +%s)"
-if [ "$epoch" -lt "$epoch2021" ] || { isDebianBusterOrOlder="$([ -f "$rootfsDir/etc/os-release" ] && source "$rootfsDir/etc/os-release" && [ -n "${VERSION_ID:-}" ] && [ "${VERSION_ID%%.*}" -le 10 ] && echo 1)" || { isDebianBusterOrOlder="$([ -f "$rootfsDir/etc/os-release" ] && source "$rootfsDir/etc/os-release" && [ -n "${VERSION_ID:-}" ] && [ "${VERSION_ID%%.*}" -le 2 ] && echo 1)" && [ -n "$isDebianBusterOrOlder" ]; }; then
-	# prefer iproute2 if it exists
-	iproute=iproute2
-	if ! debuerreotype-apt-get "$rootfsDir" install -qq -s iproute2 &> /dev/null; then
-		# poor wheezy
-		iproute=iproute
-	fi
-	ping=iputils-ping
-	noInstallRecommends='--no-install-recommends'
-	debuerreotype-apt-get "$rootfsDir" install -y $noInstallRecommends $ping $iproute
-fi
+# epoch2021="$(date --date '2021-01-01 00:00:00' +%s)"
+# if [ "$epoch" -lt "$epoch2021" ] || { isDebianBusterOrOlder="$([ -f "$rootfsDir/etc/os-release" ] && source "$rootfsDir/etc/os-release" && [ -n "${VERSION_ID:-}" ] && [ "${VERSION_ID%%.*}" -le 10 ] && echo 1)" && [ -n "$isDebianBusterOrOlder" ]; }; then
+# 	# prefer iproute2 if it exists
+# 	iproute=iproute2
+# 	if ! debuerreotype-apt-get "$rootfsDir" install -qq -s iproute2 &> /dev/null; then
+# 		# poor wheezy
+# 		iproute=iproute
+# 	fi
+# 	ping=iputils-ping
+# 	noInstallRecommends='--no-install-recommends'
+# 	debuerreotype-apt-get "$rootfsDir" install -y $noInstallRecommends $ping $iproute
+# fi
 
 debuerreotype-slimify "$rootfsDir"-slim
 
