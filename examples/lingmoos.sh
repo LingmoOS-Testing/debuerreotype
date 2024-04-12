@@ -35,7 +35,7 @@ export TZ='UTC' LC_ALL='C'
 dpkgArch='amd64'
 
 exportDir="$tmpDir/output"
-archDir="$exportDir/raspbian/$dpkgArch"
+archDir="$exportDir/lingmo/$dpkgArch"
 tmpOutputDir="$archDir/$suite"
 
 mirror='https://packages.lingmo.org'
@@ -88,7 +88,7 @@ case "${codename:-$suite}" in
 	# 	;;
 
 	*)
-		if true; then # make indentation match "examples/debian.sh" for easier diffing (we don't have epoch here so we just enable unilaterally in bookworm+ for raspbian builds)
+		if true; then # make indentation match "examples/debian.sh" for easier diffing (we don't have epoch here so we just enable unilaterally in bookworm+ for lingmo builds)
 			initArgs+=( --merged-usr )
 			debootstrap="$(command -v debootstrap)"
 			if ! grep -q EXCLUDE_DEPENDENCY "$debootstrap" || ! grep -q EXCLUDE_DEPENDENCY "${DEBOOTSTRAP_DIR:-/usr/share/debootstrap}/functions"; then
@@ -202,7 +202,7 @@ for rootfs in "$rootfsDir"*/; do
 	variant="${variant#-}" # "", "slim", ...
 
 	variantDir="$tmpOutputDir/$variant"
-	mkdir -p "$variantDir"
+	mkdir -pv "$variantDir"
 
 	targetBase="$variantDir/rootfs"
 
