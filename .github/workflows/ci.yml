@@ -47,7 +47,7 @@ jobs:
         with:
           name: ${{ matrix.DISTRO && format('{0}_', matrix.DISTRO) }}${{ matrix.SUITE }}${{ matrix.CODENAME && format('_{0}', matrix.CODENAME) }}${{ matrix.ARCH && format('_{0}', matrix.ARCH) }}
           path: |
-            ./artifacts/**
+            ./release_dir/**
           if-no-files-found: error
 
       - uses: ncipollo/release-action@v1
