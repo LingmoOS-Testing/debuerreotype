@@ -38,21 +38,23 @@ jobs:
           rm -rf ~/phe
       - name: Build
         run: |
-          mkdir -pv ./artifacts/${ARCH}/
-          mkdir -pv ./release_dir/
+          mkdir -pv ./artifacts
           "./.validate-${DISTRO:-debian}.sh"
-          mv -v ./artifacts/${ARCH}/rootfs.tar.xz ./release_dir/${DISTRO}_${SUITE}_${ARCH}.tar.xz
+
+      - name: Pack Artifacts
+        run |
+          tar -Jcvf artifacts.tar.xz artifacts
 
       - uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.DISTRO && format('{0}_', matrix.DISTRO) }}${{ matrix.SUITE }}${{ matrix.CODENAME && format('_{0}', matrix.CODENAME) }}${{ matrix.ARCH && format('_{0}', matrix.ARCH) }}
           path: |
-            ./release_dir/**
+            ./artifacts.tar.xz
           if-no-files-found: error
 
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "./release_dir/**"
+          artifacts: "./artifacts.tar.xz"
           tag: "latest_auto_pack"
           allowUpdates: true
           token: ${{secrets.GITHUB_TOKEN}}
