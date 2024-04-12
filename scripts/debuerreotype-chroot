@@ -7,7 +7,7 @@ source "$thisDir/.constants.sh" \
 	'rootfs apt-get update'
 
 eval "$dgetopt"
-while ; do
+while true; do
 	flag="$1"; shift
 	dgetopt-case "$flag"
 	case "$flag" in

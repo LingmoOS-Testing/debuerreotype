@@ -136,7 +136,7 @@ unshare-debootstrap() {
 	unshare --mount debootstrap "$@"
 }
 
-: "${debootstrap:=debootstrap}"
+: "${debootstrap:=unshare-debootstrap}"
 if ! "$debootstrap" "${debootstrapArgs[@]}"; then
 	if [ -f "$targetDir/debootstrap/debootstrap.log" ]; then
 		echo >&2
