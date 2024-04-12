@@ -83,9 +83,9 @@ fi
 # https://github.com/debuerreotype/docker-debian-artifacts/issues/131#issuecomment-1190233249
 case "${codename:-$suite}" in
 	# this has to be a full codename list because we don't have aptVersion available yet because there's no APT yet 🙈
-	polaris)
-		initArgs+=( --no-merged-usr )
-		;;
+	# polaris)
+	# 	initArgs+=( --no-merged-usr )
+	# 	;;
 
 	*)
 		if true; then # make indentation match "examples/debian.sh" for easier diffing (we don't have epoch here so we just enable unilaterally in bookworm+ for raspbian builds)
