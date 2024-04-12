@@ -42,7 +42,7 @@ jobs:
           "./.validate-${DISTRO:-debian}.sh"
 
       - name: Pack Artifacts
-        run |
+        run: |
           tar -Jcvf artifacts.tar.xz artifacts
 
       - uses: actions/upload-artifact@v3
