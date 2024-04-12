@@ -39,7 +39,9 @@ jobs:
       - name: Build
         run: |
           mkdir -pv ./artifacts/${ARCH}/
+          mkdir -pv ./release_dir/
           "./.validate-${DISTRO:-debian}.sh"
+          mv -v ./artifacts/${ARCH}/rootfs.tar.xz ./release_dir/${DISTRO}_${SUITE}_${ARCH}.tar.xz
 
       - uses: actions/upload-artifact@v3
         with:
@@ -50,7 +52,7 @@ jobs:
 
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "./artifacts/**"
+          artifacts: "./release_dir/**"
           tag: "latest_auto_pack"
           allowUpdates: true
           token: ${{secrets.GITHUB_TOKEN}}
