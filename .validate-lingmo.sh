@@ -22,3 +22,5 @@ set -x
 
 real="$(sha256sum "$checkFile" | cut -d' ' -f1)"
 [ -z "$SHA256" ] || [ "$SHA256" = "$real" ]
+
+cp -rfv $checkFile ./artifacts/${ARCH}/
