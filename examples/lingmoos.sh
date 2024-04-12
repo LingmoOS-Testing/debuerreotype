@@ -35,7 +35,7 @@ export TZ='UTC' LC_ALL='C'
 dpkgArch='amd64'
 
 exportDir="$tmpDir/output"
-archDir="$exportDir/lingmo/$dpkgArch"
+archDir="$exportDir/$(date +"%Y%m%d")/$dpkgArch"
 tmpOutputDir="$archDir/$suite"
 
 mirror='https://packages.lingmo.org'
