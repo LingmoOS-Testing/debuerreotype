@@ -43,7 +43,7 @@ jobs:
           options: -v ${{ github.workspace }}:/work
           run: |
             mkdir /work/artifacts/${ARCH}
-            "bash /work/.validate-${DISTRO:-debian}.sh"
+            "/work/.validate-${DISTRO:-debian}.sh"
 
       - uses: actions/upload-artifact@v3
         with:
