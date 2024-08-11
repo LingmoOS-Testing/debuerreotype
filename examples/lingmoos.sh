@@ -114,7 +114,7 @@ debuerreotype-init "${initArgs[@]}" "$rootfsDir" "$suite" "$mirror"
 
 debuerreotype-minimizing-config "$rootfsDir"
 
-keyUrl='/usr/share/keyrings/lingmo-archive-keyring.gpg'
+keyUrl='https://packages.lingmo.org/packages/key/lingmo-key.gpg.key'
 keyring="$rootfsDir/etc/apt/trusted.gpg.d/lingmo-archive-keyring.gpg"
 wget -O "$keyring.asc" "$keyUrl"
 
