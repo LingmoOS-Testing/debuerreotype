@@ -105,17 +105,33 @@ esac
 
 # Install lingmo bootstrap
 apt update
-apt install -y sudo dpkg-dev dctrl-tools devscripts wget isolinux syslinux
-git clone https://github.com/LingmoOS/lingmo-system-build /tmp/lingmo-system-build
-bash -c "cd /tmp/lingmo-system-build/debootstrap/ && apt-get build-dep ./ && debuild -us -uc -b && apt -y install ../*.deb"
-rm -rf /tmp/lingmo-system-build
+apt install -y sudo debootstrap
+
+cat << EOF > /usr/share/debootstrap/scripts/hydrogen
+mirror_style release
+download_style apt
+finddebs_style from-indices
+variants - buildd fakechroot minbase
+keyring /usr/share/keyrings/debian-archive-keyring.gpg
+
+# include common settings
+if [ -e "$DEBOOTSTRAP_DIR/scripts/debian-common" ]; then
+ . "$DEBOOTSTRAP_DIR/scripts/debian-common"
+elif [ -e /debootstrap/debian-common ]; then
+ . /debootstrap/debian-common
+elif [ -e "$DEBOOTSTRAP_DIR/debian-common" ]; then
+ . "$DEBOOTSTRAP_DIR/debian-common"
+else
+ error 1 NOCOMMON "File not found: debian-common"
+fi
+EOF
 
 rootfsDir="$tmpDir/rootfs"
 debuerreotype-init "${initArgs[@]}" "$rootfsDir" "$suite" "$mirror"
 
 debuerreotype-minimizing-config "$rootfsDir"
 
-keyUrl='https://packages.lingmo.org/key/lingmo.gpg'
+keyUrl='/usr/share/keyrings/lingmo-archive-keyring.gpg'
 keyring="$rootfsDir/etc/apt/trusted.gpg.d/lingmo-archive-keyring.gpg"
 wget -O "$keyring.asc" "$keyUrl"
 
