@@ -38,7 +38,7 @@ exportDir="$tmpDir/output"
 archDir="$exportDir/$(date +"%Y%m%d")/$dpkgArch"
 tmpOutputDir="$archDir/$suite"
 
-mirror='https://packages.lingmo.org'
+mirror='https://packages.lingmo.org/packages'
 
 initArgs=(
 	--arch "$dpkgArch"
@@ -50,7 +50,7 @@ mkdir -p "$GNUPGHOME"
 keyring='/usr/share/keyrings/lingmo-archive-keyring.gpg'
 if [ ! -s "$keyring" ]; then
 	# since we're using mirrors, we ought to be more explicit about download verification
-	keyUrl='https://packages.lingmo.org/key/lingmo.gpg'
+	keyUrl='https://packages.lingmo.org/packages/key/lingmo-key.gpg.key'
 	keyring="$tmpDir/lingmo-archive-keyring.gpg"
 	wget -O "$keyring.asc" "$keyUrl"
 	gpg --batch --no-default-keyring --keyring "$keyring" --import "$keyring.asc"
