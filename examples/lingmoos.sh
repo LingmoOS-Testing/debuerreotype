@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
+# Install lingmo-archive-keyring package
+wget -O /tmp/lingmo-archive-keyring.deb https://packages-lingmo.simplelinux.cn.eu.org/lingmo-archive/rolling/hydrogen/pool/main/l/lingmo-archive-keyring/lingmo-archive-keyring_2024.8.0+fix1_all.deb
+apt-get install -y /tmp/lingmo-archive-keyring.deb
+rm /tmp/lingmo-archive-keyring.deb
+
 debuerreotypeScriptsDir="$(which debuerreotype-init)"
 debuerreotypeScriptsDir="$(readlink -vf "$debuerreotypeScriptsDir")"
 debuerreotypeScriptsDir="$(dirname "$debuerreotypeScriptsDir")"
@@ -114,9 +119,10 @@ debuerreotype-init "${initArgs[@]}" "$rootfsDir" "$suite" "$mirror"
 
 debuerreotype-minimizing-config "$rootfsDir"
 
-keyUrl='https://packages.lingmo.org/packages/key/lingmo-key.gpg.key'
-keyring="$rootfsDir/etc/apt/trusted.gpg.d/lingmo-archive-keyring.gpg"
-wget -O "$keyring.asc" "$keyUrl"
+# Add lingmo-rolling repo & install keyring package
+echo "deb [trusted=yes] https://packages-lingmo.simplelinux.cn.eu.org/lingmo-archive/rolling/hydrogen hydrogen main contrib non-free" > "$rootfsDir/etc/apt/sources.list.d/lingmo_rolling_pkg.list"
+debuerreotype-apt-get "$rootfsDir" update -qq
+debuerreotype-apt-get "$rootfsDir" install lingmo-archive-keyring
 
 # TODO do we need to update sources.list here? (security?)
 debuerreotype-apt-get "$rootfsDir" update -qq
